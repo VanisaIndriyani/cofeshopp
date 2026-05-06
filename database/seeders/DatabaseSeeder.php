@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
             );
 
             Setting::set('store_name', 'Way Hitam Coffee', 'general');
-            Setting::set('address', 'Jalan R. Sukamto Jalan. Panca Sari, 8 Ilir, Ilir Tim. II, No. 63A, Kota Palembang, Sumatera Selatan 30164', 'general');
+            Setting::set('address', 'Kodam II Sriwijaya, Palembang, Sumatera Selatan', 'general');
             Setting::set('whatsapp', '081234567890', 'general');
             Setting::set('instagram', 'https://www.instagram.com/coffee_way_hitam/', 'general');
             Setting::set('tax_percent', '0', 'pricing');

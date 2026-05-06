@@ -112,7 +112,7 @@
                                 <div class="flex items-start gap-3">
                                     <x-heroicon-s-map-pin class="h-5 w-5 text-yellow-500 shrink-0" />
                                     <span class="text-sm font-bold text-gray-600 dark:text-slate-400 leading-relaxed">
-                                        {{ ($settings['address'] ?? 'Jalan R. Sukamto, Palembang') }}
+                                        {{ ($settings['address'] ?? 'Kodam II Sriwijaya, Palembang') }}
                                     </span>
                                 </div>
                                 <div class="flex items-center gap-3">
