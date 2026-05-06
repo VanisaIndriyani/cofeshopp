@@ -16,6 +16,15 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            animation: {
+                shimmer: 'shimmer 2.5s linear infinite',
+            },
+            keyframes: {
+                shimmer: {
+                    '0%': { transform: 'translateX(-100%)' },
+                    '100%': { transform: 'translateX(100%)' },
+                },
+            },
             colors: {
                 coffee: {
                     50: '#fbf7f2',

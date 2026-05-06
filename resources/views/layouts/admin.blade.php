@@ -4,12 +4,65 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ $title ?? 'Admin - CoffeeShop' }}</title>
+        <title>{{ $title ?? 'Admin - Way Hitam Coffee' }}</title>
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="h-full overflow-x-hidden bg-gray-50 text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100">
+        @php
+            $adminNav = [
+                [
+                    'label' => 'Dashboard',
+                    'route' => 'admin.dashboard',
+                    'active' => 'admin.dashboard',
+                    'icon' => 'heroicon-o-squares-2x2',
+                ],
+                [
+                    'label' => 'Pesanan',
+                    'route' => 'admin.orders.index',
+                    'active' => 'admin.orders.*',
+                    'icon' => 'heroicon-o-receipt-percent',
+                    'badge' => 'pendingOrders',
+                ],
+                [
+                    'label' => 'Kasir POS',
+                    'route' => 'admin.pos',
+                    'active' => 'admin.pos*',
+                    'icon' => 'heroicon-o-computer-desktop',
+                ],
+                [
+                    'label' => 'Menu',
+                    'route' => 'admin.products.index',
+                    'active' => 'admin.products.*',
+                    'icon' => 'heroicon-o-cube',
+                ],
+                [
+                    'label' => 'Stok',
+                    'route' => 'admin.stocks.index',
+                    'active' => 'admin.stocks.*',
+                    'icon' => 'heroicon-o-arrow-path',
+                ],
+                [
+                    'label' => 'Laporan',
+                    'route' => 'admin.reports.index',
+                    'active' => 'admin.reports.*',
+                    'icon' => 'heroicon-o-chart-bar',
+                ],
+                [
+                    'label' => 'Meja',
+                    'route' => 'admin.tables.index',
+                    'active' => 'admin.tables.*',
+                    'icon' => 'heroicon-o-qr-code',
+                ],
+                [
+                    'label' => 'Pengaturan',
+                    'route' => 'admin.settings.edit',
+                    'active' => 'admin.settings.*',
+                    'icon' => 'heroicon-o-cog-6-tooth',
+                ],
+            ];
+        @endphp
         <div
             class="flex min-h-screen bg-gray-50 dark:bg-gray-950"
             x-data="{
@@ -42,19 +95,20 @@
                     @click="sidebarOpen = false"
                 ></div>
                 <aside
-                    class="fixed left-0 top-0 z-50 h-screen w-72 -translate-x-full transform border-r border-black/5 bg-white shadow-2xl shadow-black/15 transition dark:border-white/10 dark:bg-gray-900"
+                    class="fixed left-0 top-0 z-50 h-screen w-80 -translate-x-full transform border-r border-black/5 bg-white/90 shadow-2xl shadow-black/15 backdrop-blur transition dark:border-white/10 dark:bg-gray-950/70"
                     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
                     x-cloak
                 >
                     <div class="flex h-full flex-col p-4">
                         <div class="flex items-center justify-between gap-3">
-                            <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-2xl px-3 py-3 transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                                <div class="grid h-10 w-10 place-items-center rounded-2xl bg-coffee-600 text-white shadow-sm">
-                                    <x-heroicon-o-fire class="h-6 w-6" />
+                            <a href="{{ route('admin.dashboard') }}" class="relative flex flex-1 items-center gap-3 overflow-hidden rounded-2xl px-3 py-3 transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
+                                <div class="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-red-600 via-yellow-500 to-red-600"></div>
+                                <div class="h-10 w-10 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+                                    <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="h-full w-full object-cover">
                                 </div>
                                 <div class="leading-tight">
-                                    <div class="text-sm font-semibold">CoffeeShop Admin</div>
-                                    <div class="text-xs text-gray-600 dark:text-gray-400">UMKM Ordering System</div>
+                                    <div class="text-sm font-semibold text-gray-950 dark:text-gray-100">Way Hitam Coffee</div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">Admin System</div>
                                 </div>
                             </a>
                             <button
@@ -66,116 +120,98 @@
                             </button>
                         </div>
 
-                        <nav class="mt-4 flex-1 space-y-1 overflow-y-auto pr-1 text-sm">
-                            <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-squares-2x2 class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Dashboard</span>
-                            </a>
-                            <a href="{{ route('admin.orders.index') }}" class="{{ request()->routeIs('admin.orders.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-receipt-percent class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Pesanan</span>
-                                <span
-                                    x-show="pendingOrders > 0"
-                                    x-cloak
-                                    class="ml-auto inline-flex min-w-6 items-center justify-center rounded-full bg-rose-600 px-2 py-0.5 text-xs font-semibold text-white"
-                                    x-text="pendingOrders"
-                                ></span>
-                            </a>
-                            <a href="{{ route('admin.pos') }}" class="{{ request()->routeIs('admin.pos*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-computer-desktop class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Kasir POS</span>
-                            </a>
-                            <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-cube class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Menu</span>
-                            </a>
-                            <a href="{{ route('admin.stocks.index') }}" class="{{ request()->routeIs('admin.stocks.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-arrow-path class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Stok</span>
-                            </a>
-                            <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-chart-bar class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Laporan</span>
-                            </a>
-                            <a href="{{ route('admin.tables.index') }}" class="{{ request()->routeIs('admin.tables.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-qr-code class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Meja</span>
-                            </a>
-                            <a href="{{ route('admin.settings.edit') }}" class="{{ request()->routeIs('admin.settings.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5" @click="sidebarOpen = false">
-                                <x-heroicon-o-cog-6-tooth class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                                <span>Pengaturan</span>
-                            </a>
+                        <div class="mt-5 flex items-center justify-between px-2">
+                            <div class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Menu</div>
+                        </div>
+                        <nav class="mt-2 flex-1 space-y-1 overflow-y-auto pr-1 text-sm">
+                            @foreach($adminNav as $item)
+                                @php($isActive = request()->routeIs($item['active']))
+                                <a
+                                    href="{{ route($item['route']) }}"
+                                    class="group relative flex items-center gap-3 rounded-2xl px-4 py-3 font-semibold transition before:absolute before:left-2 before:top-1/2 before:h-6 before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:transition before:content-[''] {{ $isActive ? 'bg-gradient-to-r from-red-600/10 via-yellow-500/5 to-transparent text-gray-950 before:opacity-100 dark:bg-white/10 dark:text-white' : 'text-gray-700 before:opacity-0 hover:bg-black/5 hover:text-gray-950 dark:text-gray-200 dark:hover:bg-white/5' }}"
+                                    @click="sidebarOpen = false"
+                                >
+                                    <x-dynamic-component :component="$item['icon']" class="h-5 w-5 {{ $isActive ? 'text-red-600' : 'text-gray-500 group-hover:text-gray-950 dark:text-gray-400 dark:group-hover:text-white' }}" />
+                                    <span class="truncate">{{ $item['label'] }}</span>
+                                    @if(isset($item['badge']))
+                                        <span
+                                            x-show="pendingOrders > 0"
+                                            x-cloak
+                                            class="ml-auto inline-flex min-w-6 items-center justify-center rounded-full bg-rose-600 px-2 py-0.5 text-xs font-semibold text-white shadow-sm shadow-rose-600/20"
+                                            x-text="pendingOrders"
+                                        ></span>
+                                    @endif
+                                </a>
+                            @endforeach
                         </nav>
 
-                        <div class="mt-4 rounded-2xl border border-black/5 bg-black/5 p-3 text-xs text-gray-600 dark:border-white/10 dark:bg-white/5 dark:text-gray-400">
-                            <div class="font-semibold text-gray-900 dark:text-gray-100">{{ auth()->user()->name ?? 'Admin' }}</div>
-                            <div class="mt-1 truncate">{{ auth()->user()->email ?? '' }}</div>
+                        <div class="mt-4 rounded-2xl border border-black/5 bg-white/70 p-3 text-xs text-gray-600 shadow-sm dark:border-white/10 dark:bg-gray-950/40 dark:text-gray-300">
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-yellow-500 text-sm font-black text-white">
+                                    {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="truncate font-semibold text-gray-950 dark:text-white">{{ auth()->user()->name ?? 'Admin' }}</div>
+                                    <div class="truncate text-gray-500 dark:text-gray-400">{{ auth()->user()->email ?? '' }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </aside>
             </div>
 
-            <aside class="fixed left-0 top-0 z-50 hidden h-screen w-72 border-r border-black/5 bg-white shadow-xl shadow-black/10 dark:border-white/10 dark:bg-gray-900 lg:flex lg:flex-col">
+            <aside class="fixed left-0 top-0 z-50 hidden h-screen w-80 border-r border-black/5 bg-white/90 shadow-xl shadow-black/10 backdrop-blur dark:border-white/10 dark:bg-gray-950/70 lg:flex lg:flex-col">
                 <div class="flex h-full flex-col p-4">
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-2xl px-3 py-3 transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                        <div class="grid h-10 w-10 place-items-center rounded-2xl bg-coffee-600 text-white shadow-sm">
-                            <x-heroicon-o-fire class="h-6 w-6" />
+                    <a href="{{ route('admin.dashboard') }}" class="relative flex items-center gap-3 overflow-hidden rounded-2xl px-3 py-3 transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
+                        <div class="absolute left-0 right-0 top-0 h-1 bg-gradient-to-r from-red-600 via-yellow-500 to-red-600"></div>
+                        <div class="h-10 w-10 overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
+                            <img src="{{ asset('img/logo.jpeg') }}" alt="Logo" class="h-full w-full object-cover">
                         </div>
                         <div class="leading-tight">
-                            <div class="text-sm font-semibold">CoffeeShop Admin</div>
-                            <div class="text-xs text-gray-600 dark:text-gray-400">UMKM Ordering System</div>
+                            <div class="text-sm font-semibold text-gray-950 dark:text-gray-100">Way Hitam Coffee</div>
+                            <div class="text-xs text-gray-600 dark:text-gray-400">Admin System</div>
                         </div>
                     </a>
 
-                    <nav class="mt-4 flex-1 space-y-1 overflow-y-auto pr-1 text-sm">
-                        <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-squares-2x2 class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Dashboard</span>
-                        </a>
-                        <a href="{{ route('admin.orders.index') }}" class="{{ request()->routeIs('admin.orders.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-receipt-percent class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Pesanan</span>
-                            <span
-                                x-show="pendingOrders > 0"
-                                x-cloak
-                                class="ml-auto inline-flex min-w-6 items-center justify-center rounded-full bg-rose-600 px-2 py-0.5 text-xs font-semibold text-white"
-                                x-text="pendingOrders"
-                            ></span>
-                        </a>
-                        <a href="{{ route('admin.pos') }}" class="{{ request()->routeIs('admin.pos*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-computer-desktop class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Kasir POS</span>
-                        </a>
-                        <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-cube class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Menu</span>
-                        </a>
-                        <a href="{{ route('admin.stocks.index') }}" class="{{ request()->routeIs('admin.stocks.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-arrow-path class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Stok</span>
-                        </a>
-                        <a href="{{ route('admin.reports.index') }}" class="{{ request()->routeIs('admin.reports.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-chart-bar class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Laporan</span>
-                        </a>
-                        <a href="{{ route('admin.tables.index') }}" class="{{ request()->routeIs('admin.tables.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-qr-code class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Meja</span>
-                        </a>
-                        <a href="{{ route('admin.settings.edit') }}" class="{{ request()->routeIs('admin.settings.*') ? 'bg-black/5 dark:bg-white/10' : '' }} group flex items-center gap-3 rounded-2xl px-3 py-2 font-semibold transition hover:bg-black/5 active:scale-[0.99] dark:hover:bg-white/5">
-                            <x-heroicon-o-cog-6-tooth class="h-5 w-5 text-coffee-700 dark:text-cream-200" />
-                            <span>Pengaturan</span>
-                        </a>
+                    <div class="mt-5 flex items-center justify-between px-2">
+                        <div class="text-xs font-semibold uppercase tracking-widest text-gray-500 dark:text-gray-400">Menu</div>
+                    </div>
+                    <nav class="mt-2 flex-1 space-y-1 overflow-y-auto pr-1 text-sm">
+                        @foreach($adminNav as $item)
+                            @php($isActive = request()->routeIs($item['active']))
+                            <a
+                                href="{{ route($item['route']) }}"
+                                class="group relative flex items-center gap-3 rounded-2xl px-4 py-3 font-semibold transition before:absolute before:left-2 before:top-1/2 before:h-6 before:w-1 before:-translate-y-1/2 before:rounded-full before:bg-red-600 before:transition before:content-[''] {{ $isActive ? 'bg-gradient-to-r from-red-600/10 via-yellow-500/5 to-transparent text-gray-950 before:opacity-100 dark:bg-white/10 dark:text-white' : 'text-gray-700 before:opacity-0 hover:bg-black/5 hover:text-gray-950 dark:text-gray-200 dark:hover:bg-white/5' }}"
+                            >
+                                <x-dynamic-component :component="$item['icon']" class="h-5 w-5 {{ $isActive ? 'text-red-600' : 'text-gray-500 group-hover:text-gray-950 dark:text-gray-400 dark:group-hover:text-white' }}" />
+                                <span class="truncate">{{ $item['label'] }}</span>
+                                @if(isset($item['badge']))
+                                    <span
+                                        x-show="pendingOrders > 0"
+                                        x-cloak
+                                        class="ml-auto inline-flex min-w-6 items-center justify-center rounded-full bg-rose-600 px-2 py-0.5 text-xs font-semibold text-white shadow-sm shadow-rose-600/20"
+                                        x-text="pendingOrders"
+                                    ></span>
+                                @endif
+                            </a>
+                        @endforeach
                     </nav>
 
-                    <div class="mt-4 rounded-2xl border border-black/5 bg-black/5 p-3 text-xs text-gray-600 dark:border-white/10 dark:bg-white/5 dark:text-gray-400">
-                        <div class="font-semibold text-gray-900 dark:text-gray-100">{{ auth()->user()->name ?? 'Admin' }}</div>
-                        <div class="mt-1 truncate">{{ auth()->user()->email ?? '' }}</div>
+                    <div class="mt-4 rounded-2xl border border-black/5 bg-white/70 p-3 text-xs text-gray-600 shadow-sm dark:border-white/10 dark:bg-gray-950/40 dark:text-gray-300">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-yellow-500 text-sm font-black text-white">
+                                {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
+                            </div>
+                            <div class="min-w-0">
+                                <div class="truncate font-semibold text-gray-950 dark:text-white">{{ auth()->user()->name ?? 'Admin' }}</div>
+                                <div class="truncate text-gray-500 dark:text-gray-400">{{ auth()->user()->email ?? '' }}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </aside>
 
-            <div class="lg:ml-72 min-h-screen flex flex-1 flex-col min-w-0">
+            <div class="lg:ml-80 min-h-screen flex flex-1 flex-col min-w-0">
                 <header class="sticky top-0 z-30 border-b border-gray-200 bg-white/90 backdrop-blur dark:border-white/10 dark:bg-gray-950/70">
                     <div class="flex items-center justify-between gap-4 px-6 py-4">
                         <div class="flex min-w-0 items-center gap-3">

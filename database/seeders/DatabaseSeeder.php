@@ -28,47 +28,75 @@ class DatabaseSeeder extends Seeder
             User::query()->updateOrCreate(
                 ['email' => 'admin@coffee.com'],
                 [
-                    'name' => 'Admin CoffeeShop',
+                    'name' => 'Admin Way Hitam Coffee',
                     'password' => Hash::make('password'),
                     'role' => 'admin',
                 ]
             );
 
-            Setting::set('store_name', 'CoffeeShop UMKM', 'general');
-            Setting::set('address', 'Jl. Contoh No. 123, Kota', 'general');
+            Setting::set('store_name', 'Way Hitam Coffee', 'general');
+            Setting::set('address', 'Jalan R. Sukamto Jalan. Panca Sari, 8 Ilir, Ilir Tim. II, No. 63A, Kota Palembang, Sumatera Selatan 30164', 'general');
             Setting::set('whatsapp', '081234567890', 'general');
-            Setting::set('tax_percent', '10', 'pricing');
-            Setting::set('service_percent', '5', 'pricing');
+            Setting::set('instagram', 'https://www.instagram.com/coffee_way_hitam/', 'general');
+            Setting::set('tax_percent', '0', 'pricing');
+            Setting::set('service_percent', '0', 'pricing');
             Setting::set('transfer_proof_required', '0', 'payment');
 
-            $coffee = Category::query()->updateOrCreate(['slug' => 'coffee'], ['name' => 'Coffee', 'sort_order' => 1, 'is_active' => true]);
-            $nonCoffee = Category::query()->updateOrCreate(['slug' => 'non-coffee'], ['name' => 'Non Coffee', 'sort_order' => 2, 'is_active' => true]);
-            $snack = Category::query()->updateOrCreate(['slug' => 'snack'], ['name' => 'Snack', 'sort_order' => 3, 'is_active' => true]);
+            $hotCoffee = Category::query()->updateOrCreate(['slug' => 'hot-coffee'], ['name' => 'Hot Coffee', 'sort_order' => 1, 'is_active' => true]);
+            $iceCoffee = Category::query()->updateOrCreate(['slug' => 'ice-coffee'], ['name' => 'Ice Coffee', 'sort_order' => 2, 'is_active' => true]);
+            $nonCoffee = Category::query()->updateOrCreate(['slug' => 'non-coffee'], ['name' => 'Non Coffee', 'sort_order' => 3, 'is_active' => true]);
+            $jus = Category::query()->updateOrCreate(['slug' => 'jus'], ['name' => 'Jus', 'sort_order' => 4, 'is_active' => true]);
+            $wedang = Category::query()->updateOrCreate(['slug' => 'wedang'], ['name' => 'Wedang', 'sort_order' => 5, 'is_active' => true]);
+            $makanan = Category::query()->updateOrCreate(['slug' => 'makanan'], ['name' => 'Makanan', 'sort_order' => 6, 'is_active' => true]);
 
             $menus = [
-                [$coffee, [
-                    ['Espresso', 18000],
-                    ['Americano', 22000],
-                    ['Cappuccino', 28000],
-                    ['Caramel Latte', 32000],
-                    ['Spanish Latte', 34000],
-                    ['Mocha', 30000],
+                [$hotCoffee, [
+                    ['Kopi Espresso', 12000],
+                    ['Kopi Americano', 15000],
+                    ['Kopi Tubruk Susu', 15000],
+                    ['Kopi Latte', 20000],
+                    ['Vietnam Drip', 17000],
+                    ['Kopi Sangek', 17000],
+                    ['Susu Panas Aren', 17000],
+                    ['Kopi Tubruk', 12000],
+                ]],
+                [$iceCoffee, [
+                    ['Cappucino', 17000],
+                    ['Es Kopi Gula Aren', 17000],
+                    ['Es Kopi Latte', 20000],
+                    ['Es Americano', 15000],
                 ]],
                 [$nonCoffee, [
-                    ['Matcha Latte', 32000],
-                    ['Chocolate', 28000],
-                    ['Red Velvet', 30000],
-                    ['Taro Latte', 30000],
-                    ['Lemon Tea', 20000],
-                    ['Yakult Lychee', 26000],
+                    ['Es Gula Aren Susu', 10000],
+                    ['Es Coklat', 13000],
+                    ['Es Te Tarik', 8000],
+                    ['Es Lemon Tea', 8000],
+                    ['Es Susu Telur', 18000],
+                    ['Es Jeruk', 7000],
+                    ['Es Teh', 5000],
+                    ['Es Susu Fresmilk', 10000],
                 ]],
-                [$snack, [
-                    ['Croissant Butter', 22000],
-                    ['French Fries', 20000],
-                    ['Chicken Popcorn', 26000],
-                    ['Donut Sugar', 16000],
-                    ['Brownies', 24000],
-                    ['Toast Peanut', 18000],
+                [$jus, [
+                    ['Jus Mangga', 10000],
+                    ['Jus Alpukat', 10000],
+                    ['Jus Buah Naga', 10000],
+                    ['Jus Mix', 15000],
+                    ['Jus Melon', 10000],
+                ]],
+                [$wedang, [
+                    ['Wedang Detox', 16000],
+                    ['Wedang Secang', 16000],
+                    ['Wedang Purwokerto', 16000],
+                    ['Wedang Serai Jeruk', 16000],
+                    ['Bandrek Susu', 12000],
+                    ['STMJ', 20000],
+                ]],
+                [$makanan, [
+                    ['Siomay', 15000],
+                    ['Mie Goreng', 10000],
+                    ['Mie Kuah', 10000],
+                    ['Pempek Kapal Selam', 13000],
+                    ['Pempek Kecil', 2000],
                 ]],
             ];
 
@@ -80,11 +108,11 @@ class DatabaseSeeder extends Seeder
                             'category_id' => $cat->id,
                             'name' => $name,
                             'price' => $price,
-                            'description' => "Signature {$cat->name} dengan rasa premium.",
+                            'description' => "Minuman favorit dengan rasa autentik dan kualitas premium.",
                             'stock' => rand(15, 60),
                             'low_stock_threshold' => 5,
                             'is_active' => true,
-                            'is_featured' => $idx < 2,
+                            'is_featured' => $idx < 2 && $cat->sort_order <= 2,
                         ]
                     );
                 }
