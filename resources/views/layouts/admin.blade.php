@@ -146,7 +146,7 @@
                         </nav>
 
                         <div class="mt-4 rounded-2xl border border-black/5 bg-white/70 p-3 text-xs text-gray-600 shadow-sm dark:border-white/10 dark:bg-gray-950/40 dark:text-gray-300">
-                            <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-3 {{ request()->routeIs('admin.profile.edit') ? '' : 'mb-2' }}">
                                 <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-yellow-500 text-sm font-black text-white">
                                     {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                                 </div>
@@ -155,6 +155,10 @@
                                     <div class="truncate text-gray-500 dark:text-gray-400">{{ auth()->user()->email ?? '' }}</div>
                                 </div>
                             </div>
+                            <a href="{{ route('admin.profile.edit') }}" class="flex items-center gap-2 rounded-xl px-3 py-2 font-semibold transition {{ request()->routeIs('admin.profile.edit') ? 'bg-red-600/10 text-red-600' : 'text-gray-700 hover:bg-black/5 hover:text-gray-950 dark:text-gray-200 dark:hover:bg-white/5' }}">
+                                <x-heroicon-o-user-circle class="h-4 w-4" />
+                                <span>Edit Profil</span>
+                            </a>
                         </div>
                     </div>
                 </aside>
@@ -198,7 +202,7 @@
                     </nav>
 
                     <div class="mt-4 rounded-2xl border border-black/5 bg-white/70 p-3 text-xs text-gray-600 shadow-sm dark:border-white/10 dark:bg-gray-950/40 dark:text-gray-300">
-                        <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3 {{ request()->routeIs('admin.profile.edit') ? '' : 'mb-2' }}">
                             <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-red-600 to-yellow-500 text-sm font-black text-white">
                                 {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                             </div>
@@ -207,6 +211,10 @@
                                 <div class="truncate text-gray-500 dark:text-gray-400">{{ auth()->user()->email ?? '' }}</div>
                             </div>
                         </div>
+                        <a href="{{ route('admin.profile.edit') }}" class="flex items-center gap-2 rounded-xl px-3 py-2 font-semibold transition {{ request()->routeIs('admin.profile.edit') ? 'bg-red-600/10 text-red-600' : 'text-gray-700 hover:bg-black/5 hover:text-gray-950 dark:text-gray-200 dark:hover:bg-white/5' }}">
+                            <x-heroicon-o-user-circle class="h-4 w-4" />
+                            <span>Edit Profil</span>
+                        </a>
                     </div>
                 </div>
             </aside>
