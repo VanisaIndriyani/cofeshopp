@@ -45,8 +45,8 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(fun
     Route::get('/dashboard/data', [AdminDashboardController::class, 'data'])->name('dashboard.data');
 
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
-    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::get('/orders/pending-count', [AdminOrderController::class, 'pendingCount'])->name('orders.pending-count');
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
     Route::get('/orders/{order}/print', [AdminOrderController::class, 'print'])->name('orders.print');
 

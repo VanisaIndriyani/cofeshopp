@@ -1,5 +1,18 @@
 <x-layouts.admin title="Admin - Pesanan" header="Pesanan" subtitle="Kelola pesanan realtime, update status, dan print struk">
-    <div class="space-y-5" x-data="{ detailOpen: false, detailHtml: '', async openDetail(id) { const res = await fetch(`/admin/orders/${id}`); const json = await res.json(); this.detailHtml = json.html; this.detailOpen = true; } }">
+    <div class="space-y-5" x-data="{
+        detailOpen: false,
+        detailHtml: '',
+        detailBaseUrl: @js(url('/admin/orders')),
+        async openDetail(id) {
+            try {
+                const res = await fetch(`${this.detailBaseUrl}/${id}`);
+                if (!res.ok) return;
+                const json = await res.json();
+                this.detailHtml = json.html ?? '';
+                this.detailOpen = true;
+            } catch (e) {}
+        }
+    }">
         <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <form class="flex flex-1 flex-col gap-2 sm:flex-row" method="GET" action="{{ route('admin.orders.index') }}">
                 <input
